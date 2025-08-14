@@ -51,17 +51,57 @@ class Widget(QWidget):
         else:
             print('User chose Cancel')
 
+    # The Qt in-built way of creating a message:
+    # To specify the type of message and it's properties
     def button_clicked_critical(self):
-        print('Critical')
+        # Structure: QtMessageBox.type(parent, title, text, buttons, standard button)
+        ret = QMessageBox.critical(self, 'Message Title',
+                                   'Critical Message!',
+                                   QMessageBox.Ok | QMessageBox.Cancel)
+        
+        if ret == QMessageBox.Ok:
+            print('User chose OK')
+        else:
+            print('User chose Cancel')
 
     def button_clicked_question(self):
-        print('Question')
+        ret = QMessageBox.question(self, 'Message Title',
+                            'Asking a question?',
+                            QMessageBox.Ok | QMessageBox.Cancel)
+        
+        if ret == QMessageBox.Ok:
+            print('User chose OK')
+        else:
+            print('User chose Cancel')
+
 
     def button_clicked_information(self):
-        print('Information')
+        ret = QMessageBox.information(self, 'Message Title',
+                            'Some information message',
+                            QMessageBox.Ok | QMessageBox.Cancel)
+        
+        if ret == QMessageBox.Ok:
+            print('User chose OK')
+        else:
+            print('User chose Cancel')
 
     def button_clicked_warning(self):
-        print('Warning')
+        ret = QMessageBox.warning(self, 'Message Title',
+                            'Some warning message',
+                            QMessageBox.Ok | QMessageBox.Cancel)
+        
+        if ret == QMessageBox.Ok:
+            print('User chose OK')
+        else:
+            print('User chose Cancel')
 
+    # In the case of the about button, it only displays text
+    # with a single 'Ok' button, which does not have a return value
     def button_clicked_about(self):
-        print('About')
+        ret = QMessageBox.about(self, 'Message Title',
+                            'Some about message')
+        
+        if ret == QMessageBox.Ok:
+            print('User chose OK')
+        else:
+            print('User chose Cancel')
