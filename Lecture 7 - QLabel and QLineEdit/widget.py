@@ -9,7 +9,12 @@ class Widget(QWidget):
         # A set of signals we can connect to
         label = QLabel('Fullname: ')
         self.line_edit = QLineEdit()
-        self.line_edit.textChanged.connect(self.text_changed)
+        # self.line_edit.textChanged.connect(self.text_changed)
+        # self.line_edit.cursorPositionChanged.connect(self.cursor_position_changed)
+        # self.line_edit.editingFinished.connect(self.editing_finished)
+        # self.line_edit.returnPressed.connect(self.return_pressed)
+        # self.line_edit.selectionChanged.connect(self.selection_changed)
+        # self.line_edit.textEdited.connect(self.text_edited)
 
         button = QPushButton('Grab data')
         button.clicked.connect(self.button_clicked)
@@ -28,9 +33,24 @@ class Widget(QWidget):
 
     # Slots
     def button_clicked(self):
-        print(f'Fullname: {self.line_edit.text()}')
+        # print(f'Fullname: {self.line_edit.text()}')
         self.text_holder_label.setText(self.line_edit.text())
 
     def text_changed(self):
-        print(f'Text changed to: {self.line_edit.text()}')
+        # print(f'Text changed to: {self.line_edit.text()}')
         self.text_holder_label.setText(self.line_edit.text())
+    
+    def cursor_position_changed(self, old, new):
+        print(f'cursor old position: {old} - new position {new}')
+
+    def editing_finished(self):
+        print('Editing finished')
+
+    def return_pressed(self):
+        print('Return pressed')
+
+    def selection_changed(self):
+        print(f'Selection changed: {self.line_edit.selectedText()}')
+
+    def text_edited(self, new_text):
+        print(f'Text edited. New text: {new_text}')
