@@ -1,6 +1,6 @@
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtCore import QSize
-from PySide6.QtWidgets import QApplication, QMainWindow, QToolBar, QPushButton
+from PySide6.QtWidgets import QApplication, QMainWindow, QToolBar, QPushButton, QStatusBar
 
 class MainWindow(QMainWindow):
     def __init__(self, app: QApplication):
@@ -46,8 +46,18 @@ class MainWindow(QMainWindow):
         toolbar.addSeparator()
         toolbar.addWidget(QPushButton('Click here'))
 
+        # Working with status bar
+        self.setStatusBar(QStatusBar(self))
+
+        button1 = QPushButton("Button1")
+        button1.clicked.connect(self.button1_clicked)
+        self.setCentralWidget(button1)
+
     def quit_app(self):
         self.app.quit()
     
     def toolbar_button_click(self):
-        print('action1 triggered')
+        self.statusBar().showMessage('Message from my app', 3000)
+
+    def button1_clicked(self):
+        print('Clicked on the button')
