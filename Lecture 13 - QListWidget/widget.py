@@ -13,12 +13,41 @@ class Widget(QWidget):
         self.list_widget.currentItemChanged.connect(self.current_item_changed)
         self.list_widget.currentTextChanged.connect(self.current_text_changed)
 
+        button_add_item = QPushButton('Add Item')
+        button_delete_item = QPushButton('Delete Item')
+        button_item_count = QPushButton('Item Count')
+        button_selected_items = QPushButton('Selected Items')
+
+        button_add_item.clicked.connect(self.add_item)
+        button_delete_item.clicked.connect(self.delete_item)
+        button_item_count.clicked.connect(self.item_count)
+        button_selected_items.clicked.connect(self.selected_items)
+
         v_layout = QVBoxLayout()
         v_layout.addWidget(self.list_widget)
+        v_layout.addWidget(button_add_item)
+        v_layout.addWidget(button_delete_item)
+        v_layout.addWidget(button_item_count)
+        v_layout.addWidget(button_selected_items)
 
         self.setLayout(v_layout)
 
     def current_item_changed(self, item):
         print(f'Current item: {item.text()}')
+
     def current_text_changed(self, text):
         print(f'Current text changed: {text}')
+
+    def add_item(self):
+        self.list_widget.addItem('New Item')
+
+    def delete_item(self):
+        self.list_widget.takeItem(self.list_widget.currentRow())
+
+    def item_count(self):
+        print(f'Item count: {self.list_widget.count()}')
+        
+    def selected_items(self):
+        list = self.list_widget.selectedItems()
+        for item in list:
+            print(item.text())
