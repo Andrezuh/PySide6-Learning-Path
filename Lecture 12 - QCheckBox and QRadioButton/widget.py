@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QGroupBox, QRadioButton, QCheckBox, QHBoxLayout, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QGroupBox, QRadioButton, QCheckBox, QHBoxLayout, QVBoxLayout, QButtonGroup
 
 class Widget(QWidget):
     def __init__(self):
@@ -15,9 +15,9 @@ class Widget(QWidget):
         mac = QCheckBox('Mac')
 
         # Slot configuration
-        # windows.toggled.connect(self.windows_box_toggled)
-        # linux.toggled.connect(self.linux_box_toggled)
-        # mac.toggled.connect(self.mac_box_toggled)
+        windows.toggled.connect(self.windows_box_toggled)
+        linux.toggled.connect(self.linux_box_toggled)
+        mac.toggled.connect(self.mac_box_toggled)
 
         # To add checkboxes to the group box widget, an intermidiate
         # layout has to be populated, and then set up inside the widget
@@ -27,7 +27,50 @@ class Widget(QWidget):
         os_layout.addWidget(mac)
         os.setLayout(os_layout)
 
-        layout = QVBoxLayout()
+
+        # Exclusive checkboxed for drinks
+        drinks = QGroupBox('Choose your drink')
+
+        beer = QCheckBox('Beer')
+        juice = QCheckBox('Juice')
+        coffee = QCheckBox('Coffee')
+        beer.setChecked(True)
+
+        # To set an exclusive checkbox selection, all the widgets
+        # have to be inserted into a grouping
+        exclusive_button_group = QButtonGroup(self)
+        exclusive_button_group.addButton(beer)
+        exclusive_button_group.addButton(juice)
+        exclusive_button_group.addButton(coffee)
+        exclusive_button_group.setExclusive(True)
+
+        drink_layout = QVBoxLayout()
+        drink_layout.addWidget(beer)
+        drink_layout.addWidget(juice)
+        drink_layout.addWidget(coffee)
+        drinks.setLayout(drink_layout)
+
+        layout = QHBoxLayout()
         layout.addWidget(os)
+        layout.addWidget(drinks)
 
         self.setLayout(layout)
+
+    # Setting up slots
+    def windows_box_toggled(self, checked):
+        if checked:
+            print('Windows box checked')
+        else:
+            print('Windows box unchecked')
+
+    def linux_box_toggled(self, checked):
+        if checked:
+            print('Linux box checked')
+        else:
+            print('Linux box unchecked')
+
+    def mac_box_toggled(self, checked):
+        if checked:
+            print('Mac box checked')
+        else:
+            print('Mac box unchecked')
