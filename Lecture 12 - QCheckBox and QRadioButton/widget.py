@@ -50,11 +50,28 @@ class Widget(QWidget):
         drink_layout.addWidget(coffee)
         drinks.setLayout(drink_layout)
 
-        layout = QHBoxLayout()
-        layout.addWidget(os)
-        layout.addWidget(drinks)
+        # Radio buttons for answers
+        # Similar to checkboxes, radio buttons are round and exclusive in nature
+        answers = QGroupBox('Choose Answer')
+        answer_a = QRadioButton('A')
+        answer_b = QRadioButton('B')
+        answer_c = QRadioButton('C')
 
-        self.setLayout(layout)
+        answers_layout = QVBoxLayout()
+        answers_layout.addWidget(answer_a)
+        answers_layout.addWidget(answer_b)
+        answers_layout.addWidget(answer_c)
+        answers.setLayout(answers_layout)
+
+        h_layout = QHBoxLayout()
+        h_layout.addWidget(os)
+        h_layout.addWidget(drinks)
+
+        v_layout = QVBoxLayout()
+        v_layout.addLayout(h_layout)
+        v_layout.addWidget(answers)
+
+        self.setLayout(v_layout)
 
     # Setting up slots
     def windows_box_toggled(self, checked):
