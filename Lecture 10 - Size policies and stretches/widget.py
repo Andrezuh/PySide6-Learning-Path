@@ -10,6 +10,9 @@ class Widget(QWidget):
         label = QLabel('Some text: ')
         line_edit = QLineEdit()
 
+        line_edit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
         h_layout_1 = QHBoxLayout()
         h_layout_1.addWidget(label)
         h_layout_1.addWidget(line_edit)
@@ -20,9 +23,9 @@ class Widget(QWidget):
 
         # Strech: Indicates how much space does the widget occupy in its layout (in units)
         h_layout_2 = QHBoxLayout()
-        h_layout_2.addWidget(button_1)
-        h_layout_2.addWidget(button_2)
-        h_layout_2.addWidget(button_3)
+        h_layout_2.addWidget(button_1,3)
+        h_layout_2.addWidget(button_2,1)
+        h_layout_2.addWidget(button_3,1)
 
         v_layout = QVBoxLayout()
         v_layout.addLayout(h_layout_1)
