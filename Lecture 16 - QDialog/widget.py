@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QComboBox, 
                                QPushButton, QLabel, QLineEdit, QGroupBox,
-                               QDialog, QSpacerItem, QSizePolicy as QSP)
+                               QDialog, QSpacerItem, QSizePolicy as QSP,
+                               QDialogButtonBox)
 
 # A QDialog object is a top level window generally purposed for
 # short term tasks and basic interactions with the user.
@@ -29,17 +30,36 @@ class MainWidget(QWidget):
         dialog1_layout.addWidget(self.dialog1_osLabel)
         dialog1.setLayout(dialog1_layout)
 
-        self.Dialog = Dialog()
+        self.Dialog1 = Dialog()
         dialog1_button.clicked.connect(self.dialog1_button_pressed)
 
+        # Demo 2: QDialogButtonBox
+        dialog2 = QGroupBox(title='QDialogButtonBox')
+        dialog2_layout = QVBoxLayout()
+        dialog2_button = QPushButton('Press me for buttons')
+        self.dialog2_label = QLabel('Some text')
+        dialog2_layout.addWidget(dialog2_button)
+        dialog2_layout.addWidget(self.dialog2_label)
+        dialog2.setLayout(dialog2_layout)
+
+        self.Dialog2 = ButtonsDialog()
+        dialog2_button.clicked.connect(self.dialog2_button_pressed)
+
         mainLayout.addWidget(dialog1)
+        mainLayout.addWidget(dialog2)
         self.setLayout(mainLayout)
 
     def dialog1_button_pressed(self):
-        state = self.Dialog.exec()
+        state = self.Dialog1.exec()
         if state == QDialog.DialogCode.Accepted:
-            self.dialog1_positionLabel.setText(f'Position: {self.Dialog.position}')
-            self.dialog1_osLabel.setText(f'Favorite OS: {self.Dialog.os}')
+            self.dialog1_positionLabel.setText(f'Position: {self.Dialog1.position}')
+            self.dialog1_osLabel.setText(f'Favorite OS: {self.Dialog1.os}')
+
+    def dialog2_button_pressed(self):
+        state = self.Dialog2.exec()
+        if state == QDialog.DialogCode.Accepted:
+            self.dialog2_label.setText(f'Your position is {self.Dialog2.position} and your favorite OS is {self.Dialog2.os}')
+
 
 class Dialog(QDialog):
     def __init__(self):
@@ -87,8 +107,60 @@ class Dialog(QDialog):
         self.setResult(QDialog.DialogCode.Rejected)
         self.reject()
 
+class ButtonsDialog(QDialog):
+    def __init__(self):
+        super().__init__()
 
+        self.position = ''
+        self.os = ''
 
+        mainLayout = QVBoxLayout()
+
+        hLayout1 = QHBoxLayout()
+        positionLabel = QLabel('Position: ')
+        self.positionEdit = QLineEdit()
+        hLayout1.addWidget(positionLabel)
+        hLayout1.addWidget(self.positionEdit)
+        mainLayout.addLayout(hLayout1)
+
+        hLayout2 = QHBoxLayout()
+        osLabel = QLabel('Favorite OS: ')
+        self.osComboBox = QComboBox(editable=False)
+        self.osComboBox.addItems(['Windows','Linux','MacOS'])
+        hLayout2.addWidget(osLabel)
+        hLayout2.addWidget(self.osComboBox)
+        mainLayout.addLayout(hLayout2)
+
+        self.stdButton = QDialogButtonBox.StandardButton
+
+        self.buttonBox = QDialogButtonBox(self.stdButton.Cancel|self.stdButton.Ok
+                                     |self.stdButton.Open|self.stdButton.Save
+                                     |self.stdButton.Yes)
+        self.buttonBox.clicked.connect(self.button_box_clicked)
+
+        mainLayout.addWidget(self.buttonBox)
+
+        self.setLayout(mainLayout)
+
+    def button_box_clicked(self, button):
+        buttonType = self.buttonBox.standardButton(button)
+
+        if buttonType == self.stdButton.Ok:
+            self.position = self.positionEdit.text()
+            self.os = self.osComboBox.currentText()
+            self.accept()
+        elif buttonType == self.stdButton.Cancel:
+            self.reject()
+        elif buttonType == self.stdButton.Save:
+            print('Save')
+        elif buttonType == self.stdButton.SaveAll:
+            print('Save All')
+        elif buttonType == self.stdButton.Open:
+            print('Open')
+        else:
+            print('Some other button')
+
+        
 
 
 
