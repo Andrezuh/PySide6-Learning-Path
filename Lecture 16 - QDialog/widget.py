@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QComboBox, 
                                QPushButton, QLabel, QLineEdit, QGroupBox,
                                QDialog, QSpacerItem, QSizePolicy as QSP,
-                               QDialogButtonBox, QFileDialog)
+                               QDialogButtonBox, QFileDialog, QFontDialog)
 
 # A QDialog object is a top level window generally purposed for
 # short term tasks and basic interactions with the user.
@@ -66,9 +66,26 @@ class MainWidget(QWidget):
 
         self.dialog3_button.clicked.connect(self.dialog3_button_pressed)
 
+        # Demo 4: QFontDialog
+
+        # This dialog allows for text customization, including the font, style,
+        # size, etc., and a preview of the text with selected properties.
+        # Note that it recognizes only the installed fonts in the system.
+
+        dialog4 = QGroupBox(title='QFontDialog')
+        dialog4_layout = QVBoxLayout()
+        self.dialog4_button = QPushButton('Press me for fonts')
+        self.dialog4_label = QLabel('Sample text')
+        dialog4_layout.addWidget(self.dialog4_button)
+        dialog4_layout.addWidget(self.dialog4_label)
+        dialog4.setLayout(dialog4_layout)
+
+        self.dialog4_button.clicked.connect(self.dialog4_button_pressed)
+
         mainLayout.addWidget(dialog1)
         mainLayout.addWidget(dialog2)
         mainLayout.addWidget(dialog3)
+        mainLayout.addWidget(dialog4)
         self.setLayout(mainLayout)
 
     def dialog1_button_pressed(self):
@@ -112,6 +129,13 @@ class MainWidget(QWidget):
                                                      './',
                                                      'Images (*.png, *.xpm, *.jpg);;All files(*.*)')
             print(f'The file to save is {filename}')
+
+    def dialog4_button_pressed(self):
+        # This specific QFontDialog method call does not require an initial
+        # QFont object, but one can be specified as a default.
+        ok, font = QFontDialog.getFont(self)
+        if ok:
+            self.dialog4_label.setFont(font)
 
 class Dialog(QDialog):
     def __init__(self):
