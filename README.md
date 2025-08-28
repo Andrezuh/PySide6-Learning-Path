@@ -12,7 +12,14 @@ Each lecture of this repo presents either one of the following:
 
 Almost by default, all lecture folders have a `main.py` and a `widget.py` files. The first one is used solely to run the application, and the other contains the relevant code for the lecture. As advised in the tutorials (and some previous experience with GUI libraries), it uses an OOP structure to manage and contain pieces of code.
 
-As I learn a new topic included in the tutorial, or from another source, I will commit the the folder with its respective files. 
+As I learn a new topic included in the tutorial, or from another source, I will commit the the folder with its respective files.
 
-Although it is a personal learning path, it might be of use to you, dear reader. If thats the case, go ahead, clone the repo and run the scripts in the lecture folders!
+Although it is a personal learning path, it might be of use to you, dear reader. If thats the case, go ahead, clone the repo and run the scripts in the lecture folders! I strongly advise creating a virtual environment in your working directory and installing the latest version of PySide inside of it, like this (in Windows):
 
+```
+python -m venv .venv
+.\.venv\Scripts/activate.bat
+pip install pyside6
+```
+
+For other OS installations, more tutorials, and API, its best to use the official [PySide6 documentation](https://doc.qt.io/qtforpython-6/index.html).
