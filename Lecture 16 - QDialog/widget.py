@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QComboBox, 
                                QPushButton, QLabel, QLineEdit, QGroupBox,
                                QDialog, QSpacerItem, QSizePolicy as QSP,
-                               QDialogButtonBox)
+                               QDialogButtonBox, QFileDialog)
 
 # A QDialog object is a top level window generally purposed for
 # short term tasks and basic interactions with the user.
@@ -45,8 +45,30 @@ class MainWidget(QWidget):
         self.Dialog2 = ButtonsDialog()
         dialog2_button.clicked.connect(self.dialog2_button_pressed)
 
+        # Demo 3: QFileDialog
+
+        # QFileDialog is a window that allows the user to browse file directories,
+        # select directories of files, and even save files edited by the application.
+        # In this example, I will use 4 ways to use this dialog:
+        # - Get a directory name
+        # - Getting a single file name
+        # - Getting multiple file names
+        # - Get a save file name
+
+        dialog3 = QGroupBox(title='QFileDialog')
+        dialog3_layout = QHBoxLayout()
+        self.dialog3_button = QPushButton('Open Dir')
+        self.dialog3_comboBox = QComboBox(editable=False)
+        self.dialog3_comboBox.addItems(['Get Dir', 'Get File', 'Get Files',' Get Save File'])
+        dialog3_layout.addWidget(self.dialog3_comboBox)
+        dialog3_layout.addWidget(self.dialog3_button)
+        dialog3.setLayout(dialog3_layout)
+
+        self.dialog3_button.clicked.connect(self.dialog3_button_pressed)
+
         mainLayout.addWidget(dialog1)
         mainLayout.addWidget(dialog2)
+        mainLayout.addWidget(dialog3)
         self.setLayout(mainLayout)
 
     def dialog1_button_pressed(self):
@@ -60,6 +82,36 @@ class MainWidget(QWidget):
         if state == QDialog.DialogCode.Accepted:
             self.dialog2_label.setText(f'Your position is {self.Dialog2.position} and your favorite OS is {self.Dialog2.os}')
 
+    def dialog3_button_pressed(self):
+        selected = self.dialog3_comboBox.currentText()
+        fileOptions = QFileDialog.Option
+        if selected == 'Get Dir':
+            dir = QFileDialog.getExistingDirectory(self,
+                                                   'Open Directory',
+                                                   './',
+                                                   fileOptions.ShowDirsOnly | fileOptions.DontResolveSymlinks )
+            print(f'The selected directory is {dir}')
+
+        elif selected == 'Get File':
+            filename,_ = QFileDialog.getOpenFileName(self,
+                                                     'Open File',
+                                                     './',
+                                                     'Images (*.png, *.xpm, *.jpg);;All files(*.*)')
+            print(f'The chosen file is {filename}')
+        elif selected == 'Get Files':
+            filenames,_ = QFileDialog.getOpenFileNames(self,
+                                                       'Open Files',
+                                                       './',
+                                                       'Images (*.png, *.xpm, *.jpg);;All files(*.*)')
+            print('The selected files are:')
+            for f in filenames:
+                print(f)
+        else: # This does not save a file, it just gets the name and path
+            filename,_ = QFileDialog.getSaveFileName(self,
+                                                     'Save File',
+                                                     './',
+                                                     'Images (*.png, *.xpm, *.jpg);;All files(*.*)')
+            print(f'The file to save is {filename}')
 
 class Dialog(QDialog):
     def __init__(self):
@@ -159,11 +211,4 @@ class ButtonsDialog(QDialog):
             print('Open')
         else:
             print('Some other button')
-
-        
-
-
-
-
-
 
