@@ -2,7 +2,7 @@ from PySide6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QComboBox,
                                QPushButton, QLabel, QLineEdit, QGroupBox,
                                QDialog, QSpacerItem, QSizePolicy as QSP,
                                QDialogButtonBox, QFileDialog, QFontDialog,
-                               QColorDialog)
+                               QColorDialog, QInputDialog)
 from PySide6.QtGui import QPalette
 
 # A QDialog object is a top level window generally purposed for
@@ -105,11 +105,31 @@ class MainWidget(QWidget):
 
         dialog5_button.clicked.connect(self.dialog5_button_pressed)
 
+        # Demo 6: QInputDialog
+
+        # A QInputDialog is a window which allows the user to enter a specific 
+        # type of value like text, integer, etc., with an embedded input widget 
+        # (i.e. QLineEdit).
+
+        dialog6 = QGroupBox(title='QInputDialog')
+        dialog6_layout = QVBoxLayout()
+        self.dialog6_comboBox = QComboBox(editable=False)
+        self.dialog6_comboBox.addItems(['Text', 'Int', 'Float', 'Item'])
+        self.dialog6_button = QPushButton('Press me for an input')
+        self.dialog6_label = QLabel('Placeholder text')
+        dialog6_layout.addWidget(self.dialog6_comboBox)
+        dialog6_layout.addWidget(self.dialog6_button)
+        dialog6_layout.addWidget(self.dialog6_label)
+        dialog6.setLayout(dialog6_layout)
+
+        self.dialog6_button.clicked.connect(self.dialog6_button_pressed)
+
         mainLayout.addWidget(dialog1)
         mainLayout.addWidget(dialog2)
         mainLayout.addWidget(dialog3)
         mainLayout.addWidget(dialog4)
         mainLayout.addWidget(dialog5)
+        mainLayout.addWidget(dialog6)
         self.setLayout(mainLayout)
 
     def dialog1_button_pressed(self):
@@ -179,6 +199,32 @@ class MainWidget(QWidget):
                                                 'Choose background color')
             palette.setColor(QPalette.ColorRole.Window, chosenColor)
             self.dialog5_label.setPalette(palette)
+
+    def dialog6_button_pressed(self):
+        inputType = self.dialog6_comboBox.currentText()
+        
+        if inputType == 'Text':
+            text, ok = QInputDialog.getText(self, 'getText','Enter your name:')
+            if ok:
+                self.dialog6_label.setText(text)
+        elif inputType == 'Int':
+            value, ok = QInputDialog.getInt(self, 'getInt','Select a value between 100 and 200:',
+                                            150,100,200)
+            if ok:
+                self.dialog6_label.setText(f'{value}')
+        elif inputType == 'Float':
+            # By default, it only allows a single decimal digit
+            value, ok = QInputDialog.getDouble(self, 'getDouble','Select a value between 100 and 200:',
+                                              150,100,200)
+            if ok:
+                self.dialog6_label.setText(f'{value}')
+        else:
+            item, ok = QInputDialog.getItem(self, 'getItem', 'Select a season',
+                                            ['Spring', 'Summer', 'Fall', 'Winter'],
+                                            editable=False)
+            if ok:
+                self.dialog6_label.setText(item)
+
 
 class Dialog(QDialog):
     def __init__(self):
