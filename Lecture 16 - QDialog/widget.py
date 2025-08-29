@@ -18,6 +18,7 @@ from PySide6.QtGui import QPalette
 class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle('QDialog widgets demo')
 
         mainLayout = QVBoxLayout()
 
@@ -36,6 +37,12 @@ class MainWidget(QWidget):
         dialog1_button.clicked.connect(self.dialog1_button_pressed)
 
         # Demo 2: QDialogButtonBox
+
+        # This object is a space in the QDialog window, to put buttons already
+        # present in the standard library, or custom ones by the developer.
+        # Additionally, each button can be configured to emit a signal
+        # corresponding to its type.
+
         dialog2 = QGroupBox(title='QDialogButtonBox')
         dialog2_layout = QVBoxLayout()
         dialog2_button = QPushButton('Press me for buttons')
@@ -61,7 +68,7 @@ class MainWidget(QWidget):
         dialog3_layout = QHBoxLayout()
         self.dialog3_button = QPushButton('Open Dir')
         self.dialog3_comboBox = QComboBox(editable=False)
-        self.dialog3_comboBox.addItems(['Get Dir', 'Get File', 'Get Files',' Get Save File'])
+        self.dialog3_comboBox.addItems(['Get Dir', 'Get File', 'Get Files','Get Save File'])
         dialog3_layout.addWidget(self.dialog3_comboBox)
         dialog3_layout.addWidget(self.dialog3_button)
         dialog3.setLayout(dialog3_layout)
@@ -224,7 +231,6 @@ class MainWidget(QWidget):
                                             editable=False)
             if ok:
                 self.dialog6_label.setText(item)
-
 
 class Dialog(QDialog):
     def __init__(self):
