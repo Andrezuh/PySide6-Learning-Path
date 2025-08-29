@@ -1,7 +1,9 @@
 from PySide6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QComboBox, 
                                QPushButton, QLabel, QLineEdit, QGroupBox,
                                QDialog, QSpacerItem, QSizePolicy as QSP,
-                               QDialogButtonBox, QFileDialog, QFontDialog)
+                               QDialogButtonBox, QFileDialog, QFontDialog,
+                               QColorDialog)
+from PySide6.QtGui import QPalette
 
 # A QDialog object is a top level window generally purposed for
 # short term tasks and basic interactions with the user.
@@ -82,10 +84,32 @@ class MainWidget(QWidget):
 
         self.dialog4_button.clicked.connect(self.dialog4_button_pressed)
 
+        # Demo 5: QColorDialog
+
+        # The QColorDialog is a window that lets the user select a color from
+        # a color map or by specifying the hexadecimal code of the desired color.
+        # In this example, the selected color from the window will change the
+        # label in the group box.
+
+        dialog5 = QGroupBox(title='QColorDialog')
+        dialog5_layout = QVBoxLayout()
+        self.dialog5_comboBox = QComboBox(editable=False)
+        self.dialog5_comboBox.addItems(['Text Color','Background Color'])
+        dialog5_button = QPushButton('Push me for colors')
+        self.dialog5_label = QLabel('Some Text')
+        self.dialog5_label.setAutoFillBackground(True) # Set for automatic color change
+        dialog5_layout.addWidget(self.dialog5_comboBox)
+        dialog5_layout.addWidget(dialog5_button)
+        dialog5_layout.addWidget(self.dialog5_label)
+        dialog5.setLayout(dialog5_layout)
+
+        dialog5_button.clicked.connect(self.dialog5_button_pressed)
+
         mainLayout.addWidget(dialog1)
         mainLayout.addWidget(dialog2)
         mainLayout.addWidget(dialog3)
         mainLayout.addWidget(dialog4)
+        mainLayout.addWidget(dialog5)
         self.setLayout(mainLayout)
 
     def dialog1_button_pressed(self):
@@ -136,6 +160,25 @@ class MainWidget(QWidget):
         ok, font = QFontDialog.getFont(self)
         if ok:
             self.dialog4_label.setFont(font)
+
+    def dialog5_button_pressed(self):
+        option = self.dialog5_comboBox.currentText()
+        palette = self.dialog5_label.palette() # Gets the label current visual config
+        
+        if option == 'Text Color':
+            color = palette.color(QPalette.ColorRole.WindowText) # Base color
+            chosenColor = QColorDialog.getColor(color, self,
+                                                'Choose text color')
+            
+            # The used setColor method only uses the ColorRole and color as inputs
+            palette.setColor(QPalette.ColorRole.WindowText, chosenColor)
+            self.dialog5_label.setPalette(palette)
+        else:
+            color = palette.color(QPalette.ColorRole.Window) # Base color
+            chosenColor = QColorDialog.getColor(color, self,
+                                                'Choose background color')
+            palette.setColor(QPalette.ColorRole.Window, chosenColor)
+            self.dialog5_label.setPalette(palette)
 
 class Dialog(QDialog):
     def __init__(self):
@@ -235,4 +278,3 @@ class ButtonsDialog(QDialog):
             print('Open')
         else:
             print('Some other button')
-
