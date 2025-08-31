@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QWidget, QApplication, QGridLayout, QGroupBox,
                                QComboBox, QLabel, QLineEdit, QPushButton,
                                QCheckBox, QTextEdit, QVBoxLayout, QStyleFactory)
-from PySide6.QtGui import QPalette
+from PySide6.QtGui import QPalette, QColorConstants, QColor
 
 # This lecture will show how styling works in both the whole application and to
 # specific widgets, with Qt in-built methods, and also external styling.
@@ -33,11 +33,53 @@ class MainWidget(QWidget):
 
         self.styleSelector.currentTextChanged.connect(self.change_window_style)
 
+        # Demo 2: Palettes
+
+        # QPalettes are standalone objects or information part of an existing
+        # widget, which holds color configuration, including how it is applied
+        # to the widget (i.e. text, background, cursor, highlight, etc.)
+
+        colors = ['white','red','green','blue','black','cyan','magenta','yellow',
+                  'gray'] # Define basic colors for combobox selection
+        
+        self.globalPalette = QPalette() # Global palette that contains color config
+
+        group2 = QGroupBox('QPallete')
+        group2_layout = QGridLayout()
+        group2_textLabel = QLabel('Text')
+        group2_backgroundLabel = QLabel('Background')
+        self.group2_textCombo = QComboBox(editable=False,
+                                          placeholderText='Select a color')
+        self.group2_textCombo.addItems(colors)
+        self.group2_backgroundCombo = QComboBox(editable=False,
+                                                placeholderText='Select a color')
+        self.group2_backgroundCombo.addItems(colors)
+        self.group2_testLabel = QLabel('This is some text')
+        self.group2_testLabel.setAutoFillBackground(True)
+        group2_layout.addWidget(group2_textLabel, 0,0)
+        group2_layout.addWidget(group2_backgroundLabel, 0,1)
+        group2_layout.addWidget(self.group2_textCombo, 1,0)
+        group2_layout.addWidget(self.group2_backgroundCombo, 1,1)
+        group2_layout.addWidget(self.group2_testLabel, 2,0, 1,2)
+        group2.setLayout(group2_layout)
+
+        self.group2_textCombo.currentTextChanged.connect(self.change_text_color)
+        self.group2_backgroundCombo.currentTextChanged.connect(self.change_background_color)
+
         mainLayout.addWidget(group1, 0,0)
+        mainLayout.addWidget(group2, 1,0)
 
         self.setLayout(mainLayout)
 
     def change_window_style(self, style):
         self.app.setStyle(style)
+
+    def change_text_color(self, color):
+        self.globalPalette.setColor(QPalette.ColorRole.WindowText, QColor.fromString(color))
+        self.group2_testLabel.setPalette(self.globalPalette)
+
+    def change_background_color(self, color):
+        self.globalPalette.setColor(QPalette.ColorRole.Window, QColor.fromString(color))
+        self.group2_testLabel.setPalette(self.globalPalette)
 
         
