@@ -1,0 +1,34 @@
+QLineEdit {
+    font-size: x-large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: blueviolet;
+}
+
+QLabel {
+    font-size: 25 px;
+    border-style: dashed;
+    border-color: green;
+}
+
+QPushButton {
+    background-color: coral;
+    color: white;
+}
+
+QComboBox {
+    color: darkturquoise;
+    font-size: 48 px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

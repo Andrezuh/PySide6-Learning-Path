@@ -108,9 +108,29 @@ class MainWidget(QWidget):
 
         self.group3_textEdit.textChanged.connect(self.set_style_sheet)
 
+        # Demo 4: External Style Sheets
+
+        # In addition to specified style sheets in the source code, it is
+        # possible to outsource the styling sheet configuration to an external
+        # .css file. The advantage to an external file is real time testing of
+        # the sheet parameters in the program, without needing to restart the
+        # program.
+
+        group4 = QGroupBox('External Style Sheet')
+        group4_layout = QVBoxLayout()
+        self.group4_styleButton = QPushButton('Press me for external style sheet')
+        self.group4_resetButton = QPushButton('Reset to default style')
+        group4_layout.addWidget(self.group4_styleButton)
+        group4_layout.addWidget(self.group4_resetButton)
+        group4.setLayout(group4_layout)
+
+        self.group4_styleButton.clicked.connect(self.set_external_style)
+        self.group4_resetButton.clicked.connect(self.reset_style)
+
         mainLayout.addWidget(group1, 0,0)
         mainLayout.addWidget(group2, 1,0)
         mainLayout.addWidget(self.group3, 0,1, 2,1)
+        mainLayout.addWidget(group4, 2,0, 1,2)
 
         self.setLayout(mainLayout)
 
@@ -130,5 +150,13 @@ class MainWidget(QWidget):
         # The Qt engine will automatically parse the style sheet, and apply
         # the changes if it's valid.
         self.group3.setStyleSheet(qss)
+
+    def set_external_style(self):
+        with open('./style.css') as file:
+            style = file.read()
+            self.setStyleSheet(style)
+
+    def reset_style(self):
+        self.setStyleSheet('')
 
         
