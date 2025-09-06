@@ -1,13 +1,17 @@
 from PySide6.QtWidgets import (QWidget, QMainWindow, QApplication, QTableView)
 from PySide6.QtCore import QPersistentModelIndex, Qt, QAbstractTableModel, QModelIndex
+from PySide6.QtGui import QColor
 import sys
 from datetime import datetime
+
+hue = ['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0',
+'#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f']
 
 class TableModel(QAbstractTableModel):
     def __init__(self, data):
         super().__init__()
         self._data = data
-
+    
     # DEMO 1: Value Formatting
     def data(self, index:QModelIndex, role):
         if role == Qt.ItemDataRole.DisplayRole:
@@ -28,6 +32,29 @@ class TableModel(QAbstractTableModel):
                 # returns the value
                 return value
         
+        # Depending on the assigned role, different things can be styled in the
+        # cell, like alignment, text color, background color and/or hue, etc.
+
+        # DEMO 2: Text color
+        if role == Qt.ItemDataRole.BackgroundRole and index.column() == 2:
+            return QColor(Qt.GlobalColor.blue)
+        
+        # DEMO 3: Text alignment
+        if role == Qt.ItemDataRole.TextAlignmentRole:
+            value = self._data[index.row()][index.column()]
+
+            if isinstance(value, int) or isinstance(value, float):
+                return Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight
+            
+        # DEMO 4: Text colors
+        if role == Qt.ItemDataRole.ForegroundRole:
+            value = self._data[index.row()][index.column()]
+
+            if (
+                isinstance(value, int) or isinstance(value, float)
+            ) and value < 0:
+                return QColor('red')
+
     def rowCount(self, index):
         return len(self._data)
     
@@ -40,7 +67,7 @@ class MainWindow(QMainWindow):
 
         self.table = QTableView()
 
-        # To use in DEMO 1
+        # To use in DEMO 1, 2, 3 and 4
         data = [
             [4, 9, 2],
             [1, -1, 'hello'],
