@@ -14,6 +14,7 @@ class TableModel(QAbstractTableModel):
     
     # DEMO 1: Value Formatting
     def data(self, index:QModelIndex, role):
+        
         if role == Qt.ItemDataRole.DisplayRole:
             value =  self._data[index.row()][index.column()]
 
@@ -36,17 +37,20 @@ class TableModel(QAbstractTableModel):
         # cell, like alignment, text color, background color and/or hue, etc.
 
         # DEMO 2: Text color
+        """ 
         if role == Qt.ItemDataRole.BackgroundRole and index.column() == 2:
             return QColor(Qt.GlobalColor.blue)
-        
+        """
         # DEMO 3: Text alignment
+        """ 
         if role == Qt.ItemDataRole.TextAlignmentRole:
             value = self._data[index.row()][index.column()]
 
             if isinstance(value, int) or isinstance(value, float):
                 return Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight
-            
+        """
         # DEMO 4: Text colors
+        """ 
         if role == Qt.ItemDataRole.ForegroundRole:
             value = self._data[index.row()][index.column()]
 
@@ -54,6 +58,19 @@ class TableModel(QAbstractTableModel):
                 isinstance(value, int) or isinstance(value, float)
             ) and value < 0:
                 return QColor('red')
+        """    
+        # DEMO 5: Color gradient
+        if role == Qt.ItemDataRole.BackgroundRole:
+            value = self._data[index.row()][index.column()]
+
+            if isinstance(value, (int, float)):
+                value = int(value)
+
+                value = max(-5, value)
+                value = min(5, value)
+                value = value + 5
+
+                return QColor(hue[value])
 
     def rowCount(self, index):
         return len(self._data)
@@ -68,12 +85,21 @@ class MainWindow(QMainWindow):
         self.table = QTableView()
 
         # To use in DEMO 1, 2, 3 and 4
+
+        # data = [
+        #     [4, 9, 2],
+        #     [1, -1, 'hello'],
+        #     [3.023, 5, -5],
+        #     [3, 3, datetime(2017,10,1)],
+        #     [7.555, 8, 9],
+        # ]
+
         data = [
-            [4, 9, 2],
-            [1, -1, 'hello'],
-            [3.023, 5, -5],
-            [3, 3, datetime(2017,10,1)],
-            [7.555, 8, 9],
+            [4,9,2],
+            [1,-1,-1],
+            [3,5,-5],
+            [3,3,2],
+            [7,8,9]
         ]
 
         self.model = TableModel(data)
