@@ -4,6 +4,7 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from os import path
 import sys
+import re
 
 basedir = path.dirname(__file__)
 
@@ -85,7 +86,15 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
     def update_filter(self, s):
-        filter_str = f'Name LIKE "%{s}%"' # Uses an SQL WHERE clause
+
+        # A simple filter tries to use a SQL WHERE clause, however it is prone
+        # to SQL injection.
+        """ filter_str = f'Name LIKE "%{s}%"' """
+
+        # A solution is to use a regex (regular expression) filter, to allow
+        # the search to keep going.
+        s = re.sub(r'[\W_+]', '',s)
+        filter_str = f'Name LIKE "%{s}%"'
         self.model.setFilter(filter_str)
 
 
