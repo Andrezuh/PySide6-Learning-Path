@@ -52,8 +52,21 @@ class MainWindow(QMainWindow):
 
     # When this method is called, it interrupts recurring_method() and freezes
     # the application while 5 seconds pass in the process
+    """ 
     def oh_no(self):
         time.sleep(5)
+    """
+
+    # If instead, we setup a event processor inside the oh_no() method, it will
+    # allow the event loop to respond to OS events, in this case the continous
+    # timer. However, events are now no longer controlled by the code, but by 
+    # Qt, making the running tasks longer and with possible undefined behaviour.
+
+    # This is not recommended AT ALL!!!
+    def oh_no(self):
+        for n in range(5):
+            QApplication.processEvents()
+            time.sleep(1)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
